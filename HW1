@@ -3,7 +3,7 @@
 
 
 
-unsigned shiftleft(unsigned int zer,unsigned int sizebi,unsigned int shift)
+unsigned shiftleft(unsigned int zer, unsigned int sizebi, unsigned int shift)
 {
 	unsigned boost = 0;
 	for (unsigned int i = 0; i < shift; ++i)
@@ -11,28 +11,28 @@ unsigned shiftleft(unsigned int zer,unsigned int sizebi,unsigned int shift)
 		boost <<= 1;
 		boost += 1;
 	}
-	boost <<= (sizebi - shift); 
-	unsigned b = zer & boost; 
-	b >>= (sizebi - shift);  
-	zer <<= shift; 
-	return zer | b; 
+	boost <<= (sizebi - shift);
+	unsigned b = zer & boost;
+	b >>= (sizebi - shift);
+	zer <<= shift;
+	return zer | b;
 }
-unsigned sdvigright(unsigned zer1, int sizebi1, int shift1) 
+unsigned shiftright(unsigned zer1, int sizebi1, int shift1)
 {
-	unsigned boost1 = 0; 
+	unsigned boost1 = 0;
 	for (unsigned int i = 0; i<shift1; ++i)
 	{
-		boost1 <<= 1; 
-		boost1 += 1; 
+		boost1 <<= 1;
+		boost1 += 1;
 	}
-	unsigned b = zer1 & boost1; 
-	b <<= (sizebi1 - shift1); 
-	zer1 >>= shift1; 
-	return zer1 | b; 
+	unsigned b = zer1 & boost1;
+	b <<= (sizebi1 - shift1);
+	zer1 >>= shift1;
+	return zer1 | b;
 }
 void CoderEncoder(char *in, char *out, unsigned int n, int key, int reg)
 {
-	srand(key); 
+	srand(key);
 	unsigned short inval, outval, gamma;
 	int sizeba;
 	for (unsigned int i = 0; i < n; i += 2)
@@ -45,21 +45,21 @@ void CoderEncoder(char *in, char *out, unsigned int n, int key, int reg)
 		else sizeba = 2;
 		memcpy(&inval, in + i, sizeba);
 		if (reg == 2)
-			inval = sdvigright(inval, sizeba * 8, 2);
+			inval = shiftright(inval, sizeba * 8, 2);
 		gamma = rand();
 		outval = gamma ^ inval;
-		if (reg == 1) outval = shiftleft(outval, sizeba * 8, 2); 
-		memcpy(out + i, &outval, sizeba); 
+		if (reg == 1) outval = shiftleft(outval, sizeba * 8, 2);
+		memcpy(out + i, &outval, sizeba);
 	}
 }
 int main(int argc, char* argv[])
 {
-	char StrIn[64];
-	char StrShifr[64]; 
-	char StrOut[64];
+	char StrIn[256];
+	char StrShifr[256];
+	char StrOut[256];
 	printf("Blocks: "); fflush(stdin);
 	gets_s(StrIn);
-	int sizelen = strlen(StrIn); 
+	int sizelen = strlen(StrIn);
 	int key1;
 	printf("\nKey for code: "); scanf_s("%d", &key1);
 	CoderEncoder(StrIn, StrShifr, sizelen, key1, 1);
